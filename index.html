@@ -1,1 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Letter of Us</title>
+    <style>
+        :root {
+            --bg-color: #e5d3c0;
+            --paper-color: #fffaf0;
+            --text-color: #4a4a4a;
+            --accent-color: #d4a373;
+            --spine-color: #a67c52;
+            --shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
 
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            overscroll-behavior-y: contain; 
+            touch-action: none;
+        }
+
+        .book {
+            position: relative;
+            width: 350px;
+            height: 480px; 
+            perspective: 2000px;
+            transform-style: preserve-3d;
+        }
+
+        .book::before {
+            content: "";
+            position: absolute;
+            left: -15px;
+            top: 5px;
+            width: 30px;
+            height: 470px;
+            background: var(--spine-color);
+            border-radius: 5px 0 0 5px;
+            box-shadow: inset -5px 0 10px rgba(0,0,0,0.3);
+            z-index: 0;
+        }
+
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: var(--paper-color);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1), inset 5px 0 10px rgba(0,0,0,0.05);
+            transform-origin: left;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center;
+            padding: 50px 40px 40px 40px; 
+            box-sizing: border-box;
+            border: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
+            backface-visibility: hidden;
+            border-radius: 0 15px 15px 0;
+            transition: transform 1s, z-index 0s 0.5s; 
+            user-select: none; 
+        }
+
+        .sunflower-icon {
+            position: absolute;
+            top: 15px;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            opacity: 0.8;
+        }
+
+        .page::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
+            pointer-events: none;
+        }
+
+        .page.flipped {
+            transform: rotateY(-180deg);
+            z-index: 0 !important; 
+        }
+
+        .page.last-page {
+            cursor: default;
+        }
+
+        h2 {
+            font-weight: normal;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-style: italic;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.05);
+            font-size: 1.6rem;
+        }
+
+        p {
+            line-height: 1.8;
+            color: var(--text-color);
+            text-align: center;
+            font-size: 1.1rem;
+            max-width: 280px;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 25px;
+            font-size: 0.85rem;
+            color: #999;
+            font-style: italic;
+        }
+
+        .cover {
+            background: linear-gradient(135deg, var(--accent-color), #b88b5c);
+            color: white;
+            border-left: 5px solid var(--spine-color);
+        }
+
+        .cover h1 {
+            font-size: 2.2rem;
+            border: 3px solid rgba(255,255,255,0.6);
+            padding: 25px;
+            text-align: center;
+            letter-spacing: 2px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        .cover .sunflower-icon {
+            color: white;
+            opacity: 1;
+            top: 25px;
+        }
+
+        .reset-btn {
+            margin-top: 30px;
+            padding: 12px 25px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .hint {
+            position: fixed;
+            bottom: 30px;
+            color: #7d634a;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="book" id="book">
+        <div class="page last-page" style="z-index: 1;">
+            <div class="sunflower-icon">🌻</div>
+            <h2>The Landing</h2>
+            <p>Just stay here by my side...<br>Prepare your heart for a peaceful place to lie.</p>
+            <button class="reset-btn" onclick="resetBook(event)">Read Again</button>
+            <div class="page-number">15</div>
+        </div>
+
+        <div class="page" style="z-index: 2;"><div class="sunflower-icon">🌻</div><h2>Surrender</h2><p>The tears have dried. Let my embrace be the blanket that shields you from the cold night.</p><div class="page-number">14</div></div>
+        <div class="page" style="z-index: 3;"><div class="sunflower-icon">🌻</div><h2>The Weight</h2><p>You don't have to carry the world. Just lay your head down; I’ll hold the silence for you.</p><div class="page-number">13</div></div>
+        <div class="page" style="z-index: 4;"><div class="sunflower-icon">🌻</div><h2>Deep Waters</h2><p>In the depth of your gaze, I found a heaven that I never have to reach for.</p><div class="page-number">12</div></div>
+        <div class="page" style="z-index: 5;"><div class="sunflower-icon">🌻</div><h2>Rest</h2><p>When the noise of the world is too loud, find your peace here. Just lay down, my love.</p><div class="page-number">11</div></div>
+        <div class="page" style="z-index: 6;"><div class="sunflower-icon">🌻</div><h2>Eternity</h2><p>I would choose you in a hundred lifetimes, in any version of reality.</p><div class="page-number">10</div></div>
+        <div class="page" style="z-index: 7;"><div class="sunflower-icon">🌻</div><h2>Soulmates</h2><p>It’s not just that I love you; it’s that I am finally home when I’m with you.</p><div class="page-number">9</div></div>
+        <div class="page" style="z-index: 8;"><div class="sunflower-icon">🌻</div><h2>The Stars</h2><p>If every star was a reason I love you, the sky would never be dark again.</p><div class="page-number">8</div></div>
+        <div class="page" style="z-index: 9;"><div class="sunflower-icon">🌻</div><h2>Promises</h2><p>I promise to listen, to grow, and to cherish the person you are becoming.</p><div class="page-number">7</div></div>
+        <div class="page" style="z-index: 10;"><div class="sunflower-icon">🌻</div><h2>Always</h2><p>Yours, forever.<br>Through every chapter yet unwritten.</p><div class="page-number">6</div></div>
+        <div class="page" style="z-index: 11;"><div class="sunflower-icon">🌻</div><h2>Future</h2><p>I look forward to the gray hairs and the porch swings, as long as your hand is in mine.</p><div class="page-number">5</div></div>
+        <div class="page" style="z-index: 12;"><div class="sunflower-icon">🌻</div><h2>The Storms</h2><p>Even when the sky turns dark, your laughter is the lighthouse that brings me home.</p><div class="page-number">4</div></div>
+        <div class="page" style="z-index: 13;"><div class="sunflower-icon">🌻</div><h2>Small Things</h2><p>It is in the morning coffee and the quiet glances where I find the most magic.</p><div class="page-number">3</div></div>
+        <div class="page" style="z-index: 14;"><div class="sunflower-icon">🌻</div><h2>The Beginning</h2><p>Do you remember the day we met? The world didn't change, but my entire universe did.</p><div class="page-number">2</div></div>
+
+        <div class="page cover" style="z-index: 15;">
+            <div class="sunflower-icon">🌻</div>
+            <h1>A Letter <br> To You</h1>
+            <p style="color: white; margin-top: 30px; font-style: italic;">Swipe or Tap to open</p>
+            <div class="page-number">1</div>
+        </div>
+    </div>
+
+    <div class="hint">Swipe or Click to turn pages</div>
+
+    <script>
+        // High quality short paper flip sound
+        const flipSound = new Audio("freesound_community-pageturn-102978.mp3");
+        
+        const pages = document.querySelectorAll('.page');
+        const pageArray = Array.from(pages).reverse(); 
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let audioUnlocked = false;
+
+        function unlockAudio() {
+            if (!audioUnlocked) {
+                // Play and immediately pause to "warm up" the audio engine
+                flipSound.play().then(() => {
+                    flipSound.pause();
+                    flipSound.currentTime = 0;
+                    audioUnlocked = true;
+                }).catch(e => console.log("Audio waiting for interaction"));
+            }
+        }
+
+        pageArray.forEach((page, index) => {
+            page.style.zIndex = pageArray.length - index;
+
+            page.addEventListener('click', (e) => {
+                unlockAudio(); // Fix for browser blocking
+                if (e.target.classList.contains('reset-btn') || page.classList.contains('last-page')) return;
+                handleFlip(page, index);
+            });
+
+            page.addEventListener('touchstart', (e) => {
+                unlockAudio();
+                touchStartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+
+            page.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                if (!page.classList.contains('last-page')) {
+                    handleSwipe(page, index);
+                }
+            }, {passive: true});
+        });
+
+        function handleSwipe(page, index) {
+            const swipeDistance = touchStartX - touchEndX;
+            if (swipeDistance > 50 && !page.classList.contains('flipped')) {
+                handleFlip(page, index);
+            } else if (swipeDistance < -50 && page.classList.contains('flipped')) {
+                handleFlip(page, index);
+            }
+        }
+
+        function handleFlip(page, index) {
+            playFlip();
+            if (!page.classList.contains('flipped')) {
+                page.classList.add('flipped');
+            } else {
+                page.classList.remove('flipped');
+                setTimeout(() => {
+                    page.style.zIndex = pageArray.length - index;
+                }, 100);
+            }
+        }
+
+        function playFlip() {
+            // Reset to start in case user flips quickly
+            flipSound.currentTime = 0;
+            flipSound.play();
+        }
+
+        function resetBook(event) {
+            event.stopPropagation();
+            pageArray.forEach((page, index) => {
+                setTimeout(() => {
+                    if (page.classList.contains('flipped')) {
+                        playFlip();
+                        page.classList.remove('flipped');
+                        setTimeout(() => {
+                            page.style.zIndex = pageArray.length - index;
+                        }, 100);
+                    }
+                }, index * 100); 
+            });
+        }
+    </script>
+</body>
+</html>
